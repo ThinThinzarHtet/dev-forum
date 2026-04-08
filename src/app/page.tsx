@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { dummyPosts } from "@/data";
 import { SINGLE_POST } from "@/path";
 import Link from "next/link";
@@ -14,12 +15,9 @@ function Home() {
             <p className="text-sm font-medium text-gray-400 line-clamp-1">
               {post.body}
             </p>
-            <Link
-              href={SINGLE_POST(post.id)}
-              className="text-blue-500 hover:underline"
-            >
-              view
-            </Link>
+            <Button asChild variant={"link"}>
+              <Link href={SINGLE_POST(post.id)}>view</Link>
+            </Button>
           </div>
         ))}
       </div>
