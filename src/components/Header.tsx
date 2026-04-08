@@ -1,13 +1,20 @@
 import { ABOUT, POSTS } from "@/path";
 import Link from "next/link";
+import { Button } from "./ui/button";
 
 function Header() {
   return (
-    <div>
-      <h2>Dev Forum</h2>
-      <div>
-        <Link href={POSTS}>Posts</Link>
-        <Link href={ABOUT}>About</Link>
+    <div className="flex items-center justify-between  mt-4 mb-8">
+      <Link href="/" className="text-4xl font-extrabold">
+        Dev.io
+      </Link>
+      <div className="space-x-4">
+        <Button variant={"link"}>
+          <Link href={POSTS}>Posts</Link>
+        </Button>
+        <Button variant={"link"}>
+          <Link href={ABOUT}>About</Link>
+        </Button>
       </div>
     </div>
   );

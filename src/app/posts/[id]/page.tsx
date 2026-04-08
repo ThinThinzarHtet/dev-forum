@@ -1,4 +1,5 @@
 import { dummyPosts } from "@/data";
+import PostItem from "@/features/post/components/PostItem";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -12,13 +13,7 @@ async function SinglePost({ params }: Props) {
   if (!post) {
     return <h2>Post not found.</h2>;
   }
-  return (
-    <div>
-      <h2 className="text-xl font-bold">{post.title}</h2>
-      <p>{post.description}</p>
-      <p className="text-sm font-medium text-gray-400 ">{post.body}</p>
-    </div>
-  );
+  return <PostItem {...post} isPostDetail={true} />;
 }
 
 export default SinglePost;
