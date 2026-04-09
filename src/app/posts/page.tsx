@@ -1,19 +1,18 @@
 import Heading from "@/components/Heading";
-import { Button } from "@/components/ui/button";
-import { dummyPosts } from "@/data";
-import PostItem from "@/features/post/components/PostItem";
-import { SINGLE_POST } from "@/path";
-import Link from "next/link";
+import PostList from "@/features/post/components/PostList";
+import { Suspense } from "react";
 
-function Posts() {
+async function Posts() {
   return (
     <main>
       <Heading title="All posts" description="View all forum posts" />
-      <div className="space-y-6">
-        {dummyPosts.map((post) => (
-          <PostItem {...post} key={post.id} />
-        ))}
-      </div>
+      <Suspense
+        fallback={
+          <p className="text-black dark:text-white">Fetching posts...</p>
+        }
+      >
+        <PostList />
+      </Suspense>
     </main>
   );
 }

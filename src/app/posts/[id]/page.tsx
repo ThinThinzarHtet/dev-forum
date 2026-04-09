@@ -1,5 +1,7 @@
 import { dummyPosts } from "@/data";
 import PostItem from "@/features/post/components/PostItem";
+import { getPost } from "@/features/post/queries/getPost";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -7,11 +9,10 @@ interface Props {
 
 async function SinglePost({ params }: Props) {
   const { id } = await params;
-
-  const post = dummyPosts.find((post) => post.id === parseInt(id));
+  const post = await getPost(id);
 
   if (!post) {
-    return <h2>Post not found.</h2>;
+    notFound();
   }
   return <PostItem {...post} isPostDetail={true} />;
 }
