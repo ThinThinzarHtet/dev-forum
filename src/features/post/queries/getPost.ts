@@ -1,9 +1,9 @@
 import { dummyPosts } from "@/data";
 import { Post } from "../types/post";
+import { prisma } from "@/lib/prisma";
 
-export const getPost = async (id: string): Promise<Post | undefined> => {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  return new Promise((resolve) => {
-    resolve(dummyPosts.find((post) => post.id === parseInt(id)));
+export const getPost = async (id: string): Promise<Post | null> => {
+  return await prisma.post.findUnique({
+    where: { id },
   });
 };
