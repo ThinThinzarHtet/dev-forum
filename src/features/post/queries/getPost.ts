@@ -1,4 +1,3 @@
-import { dummyPosts } from "@/data";
 import { Post } from "../types/post";
 import { prisma } from "@/lib/prisma";
 

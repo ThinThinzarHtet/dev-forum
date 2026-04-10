@@ -2,6 +2,8 @@ import Heading from "@/components/Heading";
 import PostList from "@/features/post/components/PostList";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 async function Posts() {
   return (
     <main>
