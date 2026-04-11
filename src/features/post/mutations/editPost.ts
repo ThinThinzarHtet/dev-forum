@@ -11,7 +11,6 @@ export const editPost = async (id: string, formData: FormData) => {
     title: formData.get("title"),
     body: formData.get("body"),
   };
-  console.log(data);
 
   await prisma.post.update({
     where: { id: data.id as string },
