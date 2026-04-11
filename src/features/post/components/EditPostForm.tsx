@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,17 +10,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
-import { createPost } from "@/features/post/mutations/createPost";
 import { Post } from "../types/post";
 import { editPost } from "../mutations/editPost";
+import { useTransition } from "react";
+import { LoaderCircle } from "lucide-react";
 
 interface EditPostFormProps {
   post: Post;
 }
 function EditPostForm({ post }: EditPostFormProps) {
-  console.log("🚀 ~ EditPostForm ~ post:", post);
+  const [isPending, startTransition] = useTransition();
 
+  const editPostAction = (formData: FormData) => {
+    startTransition(async () => {
+      await editPost(post.id as string, formData);
+    });
+  };
   return (
     <Card>
       <CardHeader>
@@ -27,10 +33,7 @@ function EditPostForm({ post }: EditPostFormProps) {
         <CardDescription>This will update the existing post</CardDescription>
       </CardHeader>
       <CardContent>
-        <form
-          action={editPost.bind(null, post.id as string)}
-          className="space-y-4"
-        >
+        <form action={editPostAction} className="space-y-4">
           <div>
             <Label htmlFor="title">Title</Label>
             <Input
@@ -46,7 +49,20 @@ function EditPostForm({ post }: EditPostFormProps) {
             <Textarea name="body" id="body" defaultValue={post?.body} />
           </div>
 
-          <Button type="submit">Update</Button>
+          <Button
+            type="submit"
+            disabled={isPending}
+            className={isPending ? "opacity-50" : "opacity-100"}
+          >
+            {isPending ? (
+              <div className="flex gap-2 items-center">
+                <LoaderCircle className="animate-spin" size={16} />{" "}
+                <span>Updating...</span>
+              </div>
+            ) : (
+              "Update"
+            )}
+          </Button>
         </form>
       </CardContent>
     </Card>
