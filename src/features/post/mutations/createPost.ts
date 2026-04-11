@@ -1,22 +1,36 @@
 "use server";
 
+import { ActionState, actionStateFilter } from "@/lib/actionStateFilter";
 import { prisma } from "@/lib/prisma";
 import { POSTS } from "@/path";
 import { revalidatePath } from "next/cache";
+import * as z from "zod";
 
-export const createPost = async (formData: FormData) => {
-  const data = {
-    title: formData.get("title"),
-    body: formData.get("body"),
-  };
-  console.log(data);
+const createPostSchema = z.object({
+  title: z.string().min(3).max(255),
+  body: z.string().min(3),
+});
 
-  await prisma.post.create({
-    data: {
-      title: data.title as string,
-      body: data.body as string,
-    },
-  });
+export const createPost = async (
+  _actionState: ActionState,
+  formData: FormData,
+) => {
+  try {
+    const data = createPostSchema.parse({
+      title: formData.get("title"),
+      body: formData.get("body"),
+    });
 
-  revalidatePath(POSTS);
+    await prisma.post.create({
+      data: {
+        title: data.title as string,
+        body: data.body as string,
+      },
+    });
+
+    revalidatePath(POSTS);
+    return { message: "Post created successfully" };
+  } catch (error) {
+    return actionStateFilter(error, formData);
+  }
 };

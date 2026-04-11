@@ -1,55 +1,53 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Post } from "../types/post";
 import { editPost } from "../mutations/editPost";
-import { useTransition } from "react";
+// import { useTransition } from "react";
 import { LoaderCircle } from "lucide-react";
+import { useFormStatus } from "react-dom";
+import CardWrapper from "./CardWrapper";
+import SubmitButton from "./SubmitButton";
 
 interface EditPostFormProps {
   post: Post;
 }
 function EditPostForm({ post }: EditPostFormProps) {
-  const [isPending, startTransition] = useTransition();
+  // const [isPending, startTransition] = useTransition();
 
-  const editPostAction = (formData: FormData) => {
-    startTransition(async () => {
-      await editPost(post.id as string, formData);
-    });
-  };
+  // const editPostAction = (formData: FormData) => {
+  //   startTransition(async () => {
+  //     await editPost(post.id as string, formData);
+  //   });
+  // };
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Update existing post</CardTitle>
-        <CardDescription>This will update the existing post</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form action={editPostAction} className="space-y-4">
-          <div>
-            <Label htmlFor="title">Title</Label>
-            <Input
-              type="text"
-              id="title"
-              name="title"
-              defaultValue={post?.title}
-            />
-          </div>
+    <CardWrapper
+      title="Update existing post"
+      description="This will update the existing post"
+    >
+      <form
+        action={editPost.bind(null, post?.id as string)}
+        className="space-y-4"
+      >
+        <div>
+          <Label htmlFor="title">Title</Label>
+          <Input
+            type="text"
+            id="title"
+            name="title"
+            defaultValue={post?.title}
+          />
+        </div>
 
-          <div>
-            <Label htmlFor="body">Description</Label>
-            <Textarea name="body" id="body" defaultValue={post?.body} />
-          </div>
+        <div>
+          <Label htmlFor="body">Description</Label>
+          <Textarea name="body" id="body" defaultValue={post?.body} />
+        </div>
 
-          <Button
+        {/* <Button
             type="submit"
             disabled={isPending}
             className={isPending ? "opacity-50" : "opacity-100"}
@@ -62,10 +60,10 @@ function EditPostForm({ post }: EditPostFormProps) {
             ) : (
               "Update"
             )}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+          </Button> */}
+        <SubmitButton label="Update" isCreate={false} />
+      </form>
+    </CardWrapper>
   );
 }
 
