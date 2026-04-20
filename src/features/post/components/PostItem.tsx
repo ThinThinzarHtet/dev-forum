@@ -11,7 +11,7 @@ import { Post } from "../types/post";
 import { Button } from "@/components/ui/button";
 import { MoveUpRight, SquarePen } from "lucide-react";
 import Link from "next/link";
-import { EDIT_POST, SINGLE_POST } from "@/path";
+import { editPostPath, singlePostPath } from "@/path";
 import { cn } from "@/lib/utils";
 import { deletePost } from "../mutations/deletePost";
 
@@ -30,13 +30,13 @@ function PostItem({ id, title, body, isPostDetail = false }: Props) {
       {!isPostDetail && (
         <CardContent className="space-x-4">
           <Button asChild>
-            <Link href={SINGLE_POST(id)}>
+            <Link href={singlePostPath(id)}>
               <MoveUpRight /> Read
             </Link>
           </Button>
 
           <Button variant="secondary" asChild>
-            <Link href={EDIT_POST(id)}>
+            <Link href={editPostPath(id)}>
               <SquarePen /> Edit
             </Link>
           </Button>

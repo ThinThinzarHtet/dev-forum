@@ -1,7 +1,7 @@
-import { ABOUT, POSTS } from "@/path";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ModeToggle";
+import { aboutPath, postsPath } from "@/path";
 
 function Header() {
   return (
@@ -14,10 +14,10 @@ function Header() {
       </Link>
       <div className="space-x-4">
         <Button variant={"link"}>
-          <Link href={POSTS}>Posts</Link>
+          <Link href={postsPath}>Posts</Link>
         </Button>
         <Button variant={"link"}>
-          <Link href={ABOUT}>About</Link>
+          <Link href={aboutPath}>About</Link>
         </Button>
         <ModeToggle />
       </div>

@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { POSTS } from "@/path";
+import { postsPath } from "@/path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -20,6 +20,6 @@ export const editPost = async (id: string, formData: FormData) => {
     },
   });
 
-  revalidatePath(POSTS);
-  redirect(POSTS);
+  revalidatePath(postsPath);
+  redirect(postsPath);
 };

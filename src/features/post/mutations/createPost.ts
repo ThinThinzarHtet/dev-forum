@@ -2,7 +2,7 @@
 
 import { ActionState, actionStateFilter } from "@/lib/actionStateFilter";
 import { prisma } from "@/lib/prisma";
-import { POSTS } from "@/path";
+import { postsPath } from "@/path";
 import { revalidatePath } from "next/cache";
 import * as z from "zod";
 
@@ -28,7 +28,7 @@ export const createPost = async (
       },
     });
 
-    revalidatePath(POSTS);
+    revalidatePath(postsPath);
     return { message: "Post created successfully" };
   } catch (error) {
     return actionStateFilter(error, formData);

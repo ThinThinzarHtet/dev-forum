@@ -1,7 +1,7 @@
-export const ABOUT = "/about";
+export const aboutPath = "/about";
 
-export const POSTS = "/posts";
+export const postsPath = "/posts";
 
-export const EDIT_POST = (id: string | number) => `${POSTS}/${id}/edit`;
+export const editPostPath = (id: string | number) => `${postsPath}/${id}/edit`;
 
-export const SINGLE_POST = (id: string | number) => `${POSTS}/${id}`;
+export const singlePostPath = (id: string | number) => `${postsPath}/${id}`;
