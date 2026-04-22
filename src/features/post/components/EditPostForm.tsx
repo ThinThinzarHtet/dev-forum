@@ -1,15 +1,29 @@
 "use client";
-import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Post } from "../types/post";
 import { editPost } from "../mutations/editPost";
-// import { useTransition } from "react";
 import { LoaderCircle } from "lucide-react";
-import { useFormStatus } from "react-dom";
+import { useAction } from "next-safe-action/hooks";
+import { Controller, useForm } from "react-hook-form";
+import { postUpdateSchema } from "../schemas";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+
+import { InputGroup, InputGroupTextarea } from "@/components/ui/input-group";
 import CardWrapper from "./CardWrapper";
+import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { redirect, useRouter } from "next/navigation";
+import { postsPath } from "@/path";
 import SubmitButton from "./SubmitButton";
 
 interface EditPostFormProps {
@@ -23,34 +37,96 @@ function EditPostForm({ post }: EditPostFormProps) {
   //     await editPost(post.id as string, formData);
   //   });
   // };
+
+  const { execute, hasErrored, hasSucceeded, isPending } = useAction(editPost);
+  const router = useRouter();
+  const form = useForm<z.infer<typeof postUpdateSchema>>({
+    resolver: zodResolver(postUpdateSchema),
+    defaultValues: {
+      id: post?.id as string,
+      title: post?.title,
+      body: post?.body,
+    },
+  });
+
+  function onSubmit(data: z.infer<typeof postUpdateSchema>) {
+    // Do something with the form values.
+    console.log(data);
+    const { id, title, body } = data;
+    execute({ id, title, body });
+  }
+
+  useEffect(() => {
+    if (hasSucceeded) {
+      toast.success("Post updated successfully");
+      router.push(postsPath);
+    }
+
+    if (hasErrored) {
+      toast.error("Something went wrong while updating the post");
+    }
+  }, [hasErrored, hasSucceeded, router]);
+
   return (
     <CardWrapper
       title="Update existing post"
       description="This will update the existing post"
     >
       <form
-        action={editPost.bind(null, post?.id as string)}
+        id="form-rhf-demo-update"
+        onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4"
       >
-        <div>
-          <Label htmlFor="title">Title</Label>
-          <Input
-            type="text"
-            id="title"
+        <FieldGroup>
+          <Controller
             name="title"
-            defaultValue={post?.title}
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-rhf-demo-title">Title</FieldLabel>
+                <Input
+                  {...field}
+                  id="form-rhf-demo-title"
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-        </div>
+          <Controller
+            name="body"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-rhf-demo-body">
+                  Description
+                </FieldLabel>
+                <InputGroup>
+                  <InputGroupTextarea
+                    {...field}
+                    id="form-rhf-demo-body"
+                    rows={6}
+                    className="min-h-24 resize-none"
+                    aria-invalid={fieldState.invalid}
+                  />
+                </InputGroup>
 
-        <div>
-          <Label htmlFor="body">Description</Label>
-          <Textarea name="body" id="body" defaultValue={post?.body} />
-        </div>
-
-        {/* <Button
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <SubmitButton label="Update" isPending={isPending} isCreate={false} />
+          {/* 
+          <Button
             type="submit"
+            className="w-fit"
             disabled={isPending}
-            className={isPending ? "opacity-50" : "opacity-100"}
+            form="form-rhf-demo-update"
           >
             {isPending ? (
               <div className="flex gap-2 items-center">
@@ -61,7 +137,7 @@ function EditPostForm({ post }: EditPostFormProps) {
               "Update"
             )}
           </Button> */}
-        <SubmitButton label="Update" isCreate={false} />
+        </FieldGroup>
       </form>
     </CardWrapper>
   );

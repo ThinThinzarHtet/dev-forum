@@ -24,11 +24,13 @@ import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import SubmitButton from "./SubmitButton";
 
 function CreatePostForm() {
   //with next safe action, we can use the useAction hook to execute the createPost action and get the status of the action.
   const { execute, hasErrored, hasSucceeded, isPending } =
     useAction(createPost);
+
   const form = useForm<z.infer<typeof postCreateSchema>>({
     resolver: zodResolver(postCreateSchema),
     defaultValues: {
@@ -48,6 +50,10 @@ function CreatePostForm() {
     if (hasSucceeded) {
       form.reset();
       toast.success("Post created successfully");
+    }
+
+    if (hasErrored) {
+      toast.error("Something went wrong while creating the post");
     }
   }, [hasErrored, hasSucceeded]);
 
@@ -105,7 +111,8 @@ function CreatePostForm() {
             )}
           />
 
-          <Button
+          <SubmitButton label="Create" isPending={isPending} isCreate={true} />
+          {/* <Button
             type="submit"
             form="form-rhf-demo"
             className="w-fit"
@@ -119,7 +126,7 @@ function CreatePostForm() {
             ) : (
               <p>Create</p>
             )}
-          </Button>
+          </Button> */}
         </FieldGroup>
       </form>
     </CardWrapper>

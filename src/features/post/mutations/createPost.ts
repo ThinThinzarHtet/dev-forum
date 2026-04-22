@@ -15,8 +15,8 @@ export const createPost = actionClient
 
       await prisma.post.create({
         data: {
-          title: data.title as string,
-          body: data.body as string,
+          title: data.title,
+          body: data.body,
         },
       });
 
