@@ -1,36 +1,27 @@
 "use server";
 
-import { ActionState, actionStateFilter } from "@/lib/actionStateFilter";
 import { prisma } from "@/lib/prisma";
+import { actionClient } from "@/lib/safe-action";
 import { postsPath } from "@/path";
 import { revalidatePath } from "next/cache";
-import * as z from "zod";
 
-const createPostSchema = z.object({
-  title: z.string().min(3).max(255),
-  body: z.string().min(3),
-});
+import { postCreateSchema } from "../schemas";
 
-export const createPost = async (
-  _actionState: ActionState,
-  formData: FormData,
-) => {
-  try {
-    const data = createPostSchema.parse({
-      title: formData.get("title"),
-      body: formData.get("body"),
-    });
+export const createPost = actionClient
+  .inputSchema(postCreateSchema)
+  .action(async ({ parsedInput: { title, body } }) => {
+    try {
+      const data = { title, body };
 
-    await prisma.post.create({
-      data: {
-        title: data.title as string,
-        body: data.body as string,
-      },
-    });
+      await prisma.post.create({
+        data: {
+          title: data.title as string,
+          body: data.body as string,
+        },
+      });
 
-    revalidatePath(postsPath);
-    return { message: "Post created successfully" };
-  } catch (error) {
-    return actionStateFilter(error, formData);
-  }
-};
+      revalidatePath(postsPath);
+    } catch (error) {
+      throw new Error("Something went wrong while creating the post");
+    }
+  });
