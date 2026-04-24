@@ -1,5 +1,7 @@
+import Heading from "@/components/Heading";
+
 function Home() {
-  return <div>Hello world!</div>;
+  return <Heading title="Homepage" />;
 }
 
 export default Home;
