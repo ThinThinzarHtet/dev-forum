@@ -1,5 +1,5 @@
-import { Post } from "../types/post";
 import { prisma } from "@/lib/prisma";
+import { Post } from "../../../../generated/prisma/client";
 
 export const getPost = async (id: string): Promise<Post | null> => {
   return await prisma.post.findUnique({
