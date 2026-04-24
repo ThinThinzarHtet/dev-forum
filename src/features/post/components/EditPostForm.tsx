@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Post } from "../types/post";
+
 import { editPost } from "../mutations/editPost";
 import { LoaderCircle } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -25,6 +25,14 @@ import { toast } from "sonner";
 import { redirect, useRouter } from "next/navigation";
 import { postsPath } from "@/path";
 import SubmitButton from "./SubmitButton";
+import { Post } from "../../../../generated/prisma/client";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface EditPostFormProps {
   post: Post;
@@ -46,14 +54,15 @@ function EditPostForm({ post }: EditPostFormProps) {
       id: post?.id as string,
       title: post?.title,
       body: post?.body,
+      status: post?.status,
     },
   });
 
   function onSubmit(data: z.infer<typeof postUpdateSchema>) {
     // Do something with the form values.
     console.log(data);
-    const { id, title, body } = data;
-    execute({ id, title, body });
+    const { id, title, body, status } = data;
+    execute({ id, title, body, status });
   }
 
   useEffect(() => {
@@ -120,23 +129,34 @@ function EditPostForm({ post }: EditPostFormProps) {
               </Field>
             )}
           />
-          <SubmitButton label="Update" isPending={isPending} isCreate={false} />
-          {/* 
-          <Button
-            type="submit"
-            className="w-fit"
-            disabled={isPending}
-            form="form-rhf-demo-update"
-          >
-            {isPending ? (
-              <div className="flex gap-2 items-center">
-                <LoaderCircle className="animate-spin" size={16} />{" "}
-                <span>Updating...</span>
-              </div>
-            ) : (
-              "Update"
+
+          <Controller
+            name="status"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-rhf-demo-status">Status</FieldLabel>
+                <Select
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger
+                    id="form-rhf-select-language"
+                    aria-invalid={fieldState.invalid}
+                    className="w-fit"
+                  >
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="item-aligned">
+                    <SelectItem value="IN_PROGRESS">IN PROGRESS</SelectItem>
+                    <SelectItem value="DONE">DONE</SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
             )}
-          </Button> */}
+          />
+          <SubmitButton label="Update" isPending={isPending} isCreate={false} />
         </FieldGroup>
       </form>
     </CardWrapper>

@@ -11,12 +11,12 @@ export const createPost = actionClient
   .inputSchema(postCreateSchema)
   .action(async ({ parsedInput: { title, body } }) => {
     try {
-      const data = { title, body };
+     
 
       await prisma.post.create({
         data: {
-          title: data.title,
-          body: data.body,
+          title,
+          body,
         },
       });
 

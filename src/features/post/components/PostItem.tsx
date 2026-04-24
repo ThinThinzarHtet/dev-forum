@@ -7,25 +7,34 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { Post } from "../types/post";
 import { Button } from "@/components/ui/button";
 import { MoveUpRight, SquarePen } from "lucide-react";
 import Link from "next/link";
 import { editPostPath, singlePostPath } from "@/path";
 import { cn } from "@/lib/utils";
 import { deletePost } from "../mutations/deletePost";
+import { Post } from "../../../../generated/prisma/client";
+import { Badge } from "@/components/ui/badge";
 
 interface Props extends Post {
   isPostDetail?: boolean;
 }
-function PostItem({ id, title, body, isPostDetail = false }: Props) {
+function PostItem({ id, title, body, isPostDetail = false, status }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription className={cn(!isPostDetail && "line-clamp-2")}>
-          {body}
-        </CardDescription>
+        <div className="flex justify-between">
+          <div>
+            <CardTitle>{title}</CardTitle>
+            <CardDescription className={cn(!isPostDetail && "line-clamp-2")}>
+              {body}
+            </CardDescription>
+          </div>
+
+          <Badge variant={status === "IN_PROGRESS" ? "outline" : "default"}>
+            {status}
+          </Badge>
+        </div>
       </CardHeader>
       {!isPostDetail && (
         <CardContent className="space-x-4">
