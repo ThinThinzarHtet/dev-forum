@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ModeToggle";
-import { aboutPath, postsPath } from "@/path";
+import { aboutPath, postsPath, signInPath, signUpPath } from "@/path";
 
 function Header() {
   return (
@@ -12,13 +12,11 @@ function Header() {
       >
         Dev.io
       </Link>
-      <div className="space-x-4">
+      <div className="flex items-center gap-2">
         <Button variant={"link"}>
           <Link href={postsPath}>Posts</Link>
         </Button>
-        <Button variant={"link"}>
-          <Link href={aboutPath}>About</Link>
-        </Button>
+        <SignInAndSignUpButton />
         <ModeToggle />
       </div>
     </div>
@@ -26,3 +24,24 @@ function Header() {
 }
 
 export default Header;
+
+function SignInAndSignUpButton() {
+  return (
+    <div className="space-x-2">
+      <Button variant={"default"}>
+        <Link href={signUpPath}>Sign Up</Link>
+      </Button>
+      <Button variant={"outline"}>
+        <Link href={signInPath}>Sign In</Link>
+      </Button>
+    </div>
+  );
+}
+
+function SignOutButton() {
+  return (
+    <div>
+      <Button variant={"destructive"}>Sign out</Button>
+    </div>
+  );
+}
