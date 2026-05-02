@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 
 import { createPost } from "@/features/post/mutations/createPost";
 
-import CardWrapper from "./CardWrapper";
 import { useAction } from "next-safe-action/hooks";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,11 +19,11 @@ import {
 } from "@/components/ui/field";
 
 import { InputGroup, InputGroupTextarea } from "@/components/ui/input-group";
-import { Button } from "@/components/ui/button";
-import { LoaderCircle } from "lucide-react";
+
 import { useEffect } from "react";
 import { toast } from "sonner";
-import SubmitButton from "./SubmitButton";
+import SubmitButton from "../../../components/SubmitButton";
+import CardWrapper from "@/components/CardWrapper";
 
 function CreatePostForm() {
   //with next safe action, we can use the useAction hook to execute the createPost action and get the status of the action.

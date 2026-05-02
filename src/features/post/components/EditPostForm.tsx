@@ -18,13 +18,13 @@ import {
 } from "@/components/ui/field";
 
 import { InputGroup, InputGroupTextarea } from "@/components/ui/input-group";
-import CardWrapper from "./CardWrapper";
+import CardWrapper from "../../../components/CardWrapper";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { redirect, useRouter } from "next/navigation";
 import { postsPath } from "@/path";
-import SubmitButton from "./SubmitButton";
+import SubmitButton from "../../../components/SubmitButton";
 import { Post } from "../../../../generated/prisma/client";
 import {
   Select,
