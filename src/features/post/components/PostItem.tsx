@@ -12,14 +12,24 @@ import { MoveUpRight, SquarePen } from "lucide-react";
 import Link from "next/link";
 import { editPostPath, singlePostPath } from "@/path";
 import { cn } from "@/lib/utils";
-import { Post } from "../../../../generated/prisma/client";
+import { Post, User } from "../../../../generated/prisma/client";
 import { Badge } from "@/components/ui/badge";
 import DeleteButton from "./DeleteButton";
+import { getSession } from "@/lib/getSession";
 
 interface Props extends Post {
   isPostDetail?: boolean;
+  user: User;
 }
-function PostItem({ id, title, body, isPostDetail = false, status }: Props) {
+async function PostItem({
+  id,
+  title,
+  body,
+  isPostDetail = false,
+  status,
+  user,
+}: Props) {
+  const session = await getSession();
   return (
     <Card>
       <CardHeader>
@@ -29,6 +39,10 @@ function PostItem({ id, title, body, isPostDetail = false, status }: Props) {
             <CardDescription className={cn(!isPostDetail && "line-clamp-2")}>
               {body}
             </CardDescription>
+
+            <p className="text-sm font-medium text-muted-foreground">
+              By {user?.name || "hello"}
+            </p>
           </div>
 
           <Badge variant={status === "IN_PROGRESS" ? "outline" : "default"}>
@@ -43,14 +57,16 @@ function PostItem({ id, title, body, isPostDetail = false, status }: Props) {
               <MoveUpRight /> Read
             </Link>
           </Button>
-
-          <Button variant="secondary" asChild>
-            <Link href={editPostPath(id)}>
-              <SquarePen /> Edit
-            </Link>
-          </Button>
+          {user.id === session?.user?.id && (
+            <Button variant="secondary" asChild>
+              <Link href={editPostPath(id)}>
+                <SquarePen /> Edit
+              </Link>
+            </Button>
+          )}
         </CardContent>
       )}
+
       {isPostDetail && <DeleteButton id={id} />}
     </Card>
   );

@@ -54,8 +54,8 @@ function SignInForm() {
 
   return (
     <CardWrapper
-      title="Sign Up"
-      description="Create an account to start using the app"
+      title="Sign In"
+      description="Sign in to your account to start using the app"
     >
       <form
         id="form-rhf-demo"

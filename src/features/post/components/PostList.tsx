@@ -2,6 +2,8 @@ import PostItem from "@/features/post/components/PostItem";
 import { getPosts } from "@/features/post/queries/getPosts";
 async function PostList() {
   const posts = await getPosts();
+  console.log("🚀 ~ PostList ~ posts:", posts);
+
   return (
     <div className="space-y-6 my-6">
       {posts.map((post) => (

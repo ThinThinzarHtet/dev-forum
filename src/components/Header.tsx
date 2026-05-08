@@ -1,9 +1,17 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ModeToggle";
-import { aboutPath, postsPath, signInPath, signUpPath } from "@/path";
+import { postsPath, signInPath, signUpPath } from "@/path";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { signOut } from "@/features/auth/mutations/signout";
 
-function Header() {
+async function Header() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  console.log("Session in header:", session);
   return (
     <div className="flex items-center justify-between  mt-4 mb-8">
       <Link
@@ -16,7 +24,8 @@ function Header() {
         <Button variant={"link"}>
           <Link href={postsPath}>Posts</Link>
         </Button>
-        <SignInAndSignUpButton />
+        {session ? <SignOutButton /> : <SignInAndSignUpButton />}
+
         <ModeToggle />
       </div>
     </div>
@@ -40,8 +49,10 @@ function SignInAndSignUpButton() {
 
 function SignOutButton() {
   return (
-    <div>
-      <Button variant={"destructive"}>Sign out</Button>
-    </div>
+    <form action={signOut}>
+      <Button variant={"destructive"} type="submit" className="cursor-pointer">
+        Sign out
+      </Button>
+    </form>
   );
 }
