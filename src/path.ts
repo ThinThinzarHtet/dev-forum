@@ -8,4 +8,5 @@ export const singlePostPath = (id: string | number) => `${postsPath}/${id}`;
 
 export const signUpPath = "/auth/sign-up";
 export const signInPath = "/auth/sign-in";
-export const forgotPasswordPath = "/forgot-password";
+export const resetPasswordPath = "/auth/reset-password";
+export const changePasswordPath = "/auth/change-password";

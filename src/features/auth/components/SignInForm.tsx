@@ -21,6 +21,8 @@ import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { useEffect } from "react";
 import { signIn } from "../mutations/signin";
+import Link from "next/link";
+import { resetPasswordPath, signUpPath } from "@/path";
 
 function SignInForm() {
   //with next safe action, we can use the useAction hook to execute the createPost action and get the status of the action.
@@ -56,6 +58,7 @@ function SignInForm() {
     <CardWrapper
       title="Sign In"
       description="Sign in to your account to start using the app"
+      footer={<Footer />}
     >
       <form
         id="form-rhf-demo"
@@ -114,3 +117,26 @@ function SignInForm() {
 }
 
 export default SignInForm;
+
+const Footer = () => {
+  return (
+    <div className="text-sm font-medium text-muted-foreground flex justify-between w-full">
+      <p>
+        Don&apos;t have an account?{" "}
+        <Link
+          href={signUpPath}
+          className="underline text-blue-600 hover:text-blue-400"
+        >
+          Sign up
+        </Link>
+      </p>
+
+      <Link
+        href={resetPasswordPath}
+        className="underline text-blue-600 hover:text-blue-400"
+      >
+        Forgot password?
+      </Link>
+    </div>
+  );
+};

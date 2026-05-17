@@ -20,6 +20,8 @@ import { signUp } from "../mutations/singup";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import Link from "next/link";
+import { signInPath } from "@/path";
 
 function SignUpForm() {
   //with next safe action, we can use the useAction hook to execute the createPost action and get the status of the action.
@@ -57,6 +59,7 @@ function SignUpForm() {
     <CardWrapper
       title="Sign Up"
       description="Create an account to start using the app"
+      footer={<Footer />}
     >
       <form
         id="form-rhf-demo"
@@ -158,3 +161,17 @@ function SignUpForm() {
 }
 
 export default SignUpForm;
+
+const Footer = () => {
+  return (
+    <p className="text-sm font-medium text-muted-foreground ">
+      Already have an account?{" "}
+      <Link
+        href={signInPath}
+        className="underline text-blue-600 hover:text-blue-400"
+      >
+        Sign in
+      </Link>
+    </p>
+  );
+};
