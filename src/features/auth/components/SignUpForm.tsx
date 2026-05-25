@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 import Link from "next/link";
 import { signInPath } from "@/path";
+import GithubOauthButton from "./GithubOauthButton";
 
 function SignUpForm() {
   //with next safe action, we can use the useAction hook to execute the createPost action and get the status of the action.
@@ -156,6 +157,7 @@ function SignUpForm() {
           <SubmitButton isPending={isPending} label="Sign Up" isCreate={true} />
         </FieldGroup>
       </form>
+      <GithubOauthButton />
     </CardWrapper>
   );
 }
