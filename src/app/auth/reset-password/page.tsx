@@ -1,6 +1,6 @@
 import ResetPasswordForm from "@/features/auth/components/ResetPasswordForm";
 
-function ResetPassword() {
+async function ResetPassword() {
   return <ResetPasswordForm />;
 }
 

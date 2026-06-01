@@ -1,6 +1,6 @@
 import SignUpForm from "@/features/auth/components/SignUpForm";
 
-function SignUp() {
+async function SignUp() {
   return <SignUpForm />;
 }
 
