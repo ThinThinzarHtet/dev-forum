@@ -23,6 +23,7 @@ import { useEffect } from "react";
 import { signIn } from "../mutations/signin";
 import Link from "next/link";
 import { resetPasswordPath, signUpPath } from "@/path";
+import GithubOauthButton from "./GithubOauthButton";
 
 function SignInForm() {
   //with next safe action, we can use the useAction hook to execute the createPost action and get the status of the action.
@@ -112,6 +113,8 @@ function SignInForm() {
           <SubmitButton isPending={isPending} label="Sign In" isCreate={true} />
         </FieldGroup>
       </form>
+      <hr className="text-muted-foreground my-6" />
+      <GithubOauthButton />
     </CardWrapper>
   );
 }

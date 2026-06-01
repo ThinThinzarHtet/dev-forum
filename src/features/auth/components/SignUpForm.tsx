@@ -157,6 +157,7 @@ function SignUpForm() {
           <SubmitButton isPending={isPending} label="Sign Up" isCreate={true} />
         </FieldGroup>
       </form>
+      <hr className="text-muted-foreground my-6" />
       <GithubOauthButton />
     </CardWrapper>
   );

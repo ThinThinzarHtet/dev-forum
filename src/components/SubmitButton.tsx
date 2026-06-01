@@ -11,7 +11,7 @@ const SubmitButton = ({ label, isPending, isCreate }: SubmitButtonProps) => {
     <Button
       type="submit"
       disabled={isPending}
-      className={` ${isPending ? "opacity-50" : "opacity-100"} w-fit`}
+      className={` ${isPending ? "opacity-50" : "opacity-100"} w-full`}
     >
       {isPending ? (
         <div className="flex gap-2 items-center">
