@@ -23,10 +23,12 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { signInPath } from "@/path";
 import GithubOauthButton from "./GithubOauthButton";
+import { redirect } from "next/navigation";
 
 function SignUpForm() {
   //with next safe action, we can use the useAction hook to execute the createPost action and get the status of the action.
-  const { execute, hasErrored, hasSucceeded, isPending } = useAction(signUp);
+  const { execute, hasErrored, hasSucceeded, isPending, result } =
+    useAction(signUp);
 
   const form = useForm<z.infer<typeof authSignUpSchema>>({
     resolver: zodResolver(authSignUpSchema),
@@ -46,15 +48,27 @@ function SignUpForm() {
   }
 
   useEffect(() => {
-    if (hasSucceeded) {
-      form.reset();
-      toast.success("Account created successfully");
+    // if (hasSucceeded) {
+    //   form.reset();
+    //   toast.success("Account created successfully");
+    // }
+
+    // if (hasErrored) {
+    //   toast.error("Something went wrong while sign up");
+    // }
+
+    const data = result.data;
+
+    if (!data) return;
+    if (data?.success) {
+      toast.success("Sign up success");
+      redirect(signInPath);
     }
 
-    if (hasErrored) {
-      toast.error("Something went wrong while sign up");
+    if (data?.error) {
+      toast.error(data.error);
     }
-  }, [hasErrored, hasSucceeded]);
+  }, [result]);
 
   return (
     <CardWrapper

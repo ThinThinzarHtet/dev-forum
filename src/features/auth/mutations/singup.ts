@@ -11,9 +11,17 @@ export const signUp = actionClient
   .action(async ({ parsedInput: { email, name, password } }) => {
     try {
       await auth.api.signUpEmail({ body: { email, name, password } });
-    } catch (error) {
-      console.log(error);
-      throw new Error("Sign up failed");
+      return {
+        success: true,
+        error: null,
+      };
+    } catch (error: any) {
+      console.log(error.message);
+      const errorMessage =
+        error.messsage || error.body.message || "Something went wrong";
+      return {
+        success: false,
+        error: errorMessage,
+      };
     }
-    redirect(signInPath);
   });

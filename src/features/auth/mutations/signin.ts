@@ -3,18 +3,24 @@ import { actionClient } from "@/lib/safe-action";
 
 import { authSignInSchema } from "../schemas";
 import { auth } from "@/lib/auth";
-import { postsPath } from "@/path";
-import { redirect } from "next/navigation";
 
 export const signIn = actionClient
   .inputSchema(authSignInSchema)
   .action(async ({ parsedInput: { email, password } }) => {
     try {
       await auth.api.signInEmail({ body: { email, password } });
-    } catch (error) {
-      console.log(error);
-      throw new Error("Sign in failed");
-    }
 
-    redirect(postsPath);
+      return {
+        success: true,
+        error: null,
+      };
+    } catch (error: any) {
+      console.log(error.message);
+      const errorMessage =
+        error.messsage || error.body.message || "Something went wrong";
+      return {
+        success: false,
+        error: errorMessage,
+      };
+    }
   });

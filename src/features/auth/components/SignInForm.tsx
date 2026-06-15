@@ -24,10 +24,12 @@ import { signIn } from "../mutations/signin";
 import Link from "next/link";
 import { resetPasswordPath, signUpPath } from "@/path";
 import GithubOauthButton from "./GithubOauthButton";
+import { redirect } from "next/navigation";
 
 function SignInForm() {
   //with next safe action, we can use the useAction hook to execute the createPost action and get the status of the action.
-  const { execute, hasErrored, hasSucceeded, isPending } = useAction(signIn);
+  const { execute, hasErrored, hasSucceeded, isPending, result } =
+    useAction(signIn);
 
   const form = useForm<z.infer<typeof authSignInSchema>>({
     resolver: zodResolver(authSignInSchema),
@@ -45,15 +47,20 @@ function SignInForm() {
   }
 
   useEffect(() => {
-    if (hasSucceeded) {
-      form.reset();
-      toast.success("Signed in successfully");
+    const data = result.data;
+    if (!data) {
+      return;
     }
 
-    if (hasErrored) {
-      toast.error("Something went wrong while signing in");
+    if (data?.success) {
+      toast.success("Signed in successfully");
+      redirect("/");
     }
-  }, [hasErrored, hasSucceeded]);
+
+    if (!data?.success) {
+      toast.error(data?.error);
+    }
+  }, [result]);
 
   return (
     <CardWrapper
