@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { Post, User } from "../../../../generated/prisma/client";
 import { Badge } from "@/components/ui/badge";
 import DeleteButton from "./DeleteButton";
-import { getSession } from "@/lib/getSession";
+import { isOwner } from "@/lib/isOwner";
 
 interface Props extends Post {
   isPostDetail?: boolean;
@@ -29,7 +29,6 @@ async function PostItem({
   status,
   user,
 }: Props) {
-  const session = await getSession();
   return (
     <Card>
       <CardHeader>
@@ -57,7 +56,7 @@ async function PostItem({
               <MoveUpRight /> Read
             </Link>
           </Button>
-          {user.id === session?.user?.id && (
+          {(await isOwner(user.id)) && (
             <Button variant="secondary" asChild>
               <Link href={editPostPath(id)}>
                 <SquarePen /> Edit
@@ -67,7 +66,7 @@ async function PostItem({
         </CardContent>
       )}
 
-      {isPostDetail && <DeleteButton id={id} />}
+      {isPostDetail && (await isOwner(user.id)) && <DeleteButton id={id} />}
     </Card>
   );
 }
